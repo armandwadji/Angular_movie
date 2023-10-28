@@ -1,0 +1,20 @@
+<div *ngIf="movieList" class="card-list">
+  <div *ngFor="let movie of movieList">
+    <div class="card">
+      <img [src]="movie.image" alt="poster" />
+      <h2>{{ movie.title }}</h2>
+      <h5>Sortie le : {{ movie.date | date : "dd/MM/YYYY" }}</h5>
+      <h4>{{ movie.moyenne | number : "1.1-1" }}/10 <span>⭐️</span></h4>
+      <ul>
+        <li *ngFor="let genre of movie.genres">
+          {{ genre | movieGenre }}
+        </li>
+      </ul>
+      <h3>Synopsis</h3>
+      <p>{{ movie.description }}</p>
+
+      <div class="btn">Ajouter aux coups de coeur</div>
+      <!-- <div class="btn">Supprimer de la liste</div> -->
+    </div>
+  </div>
+</div>
