@@ -1,0 +1,14 @@
+<div class="form-component">
+  <div class="form-container">
+    <form>
+      <input type="text" placeholder="Entrez le titre d'un film" id="search-input" #term (keyup)="search(term.value)"/>
+      <input type="submit" value="rechercher" />
+    </form>
+    <div class="btn-sort-container">
+      <div class="btn_sort" id="goodToBad">Top <span>&#8594;</span></div>
+      <div class="btn_sort" id="badToGood">Flop <span>&#8594;</span></div>
+    </div>
+  </div>
+</div>
+
+<list-movie [movieList$]="movieList$" ></list-movie>

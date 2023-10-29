@@ -15,7 +15,7 @@ export class MovieApiSerializer extends BaseApiDtoSerializer<Movie> {
       id: object.id,
       title: object.title,
       date: object.release_date,
-      image: `https://image.tmdb.org/t/p/w500${object.poster_path}`,
+      image: object.poster_path ? `https://image.tmdb.org/t/p/w500${object.poster_path}` : `../../assets/poster.jpg`,
       moyenne: object.vote_average,
       genres: object.genre_ids,
       description: object.overview,
