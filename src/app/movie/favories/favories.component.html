@@ -1,0 +1,5 @@
+<div *ngIf="movieList?.length" class="card-list">
+  <div *ngFor="let movie of movieList">
+    <card-movie [movie]="movie" [removeList]="true"></card-movie>
+  </div>
+</div>

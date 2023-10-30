@@ -25,7 +25,7 @@ export class MovieApiSerializer extends BaseApiDtoSerializer<Movie> {
   public override toJson(movie: Movie): any {
     return {
       id: movie.id,
-      title: movie.title, // Le fameux mapping
+      title: movie.title,
       release_date: movie.date,
       poster_path: movie.image,
     };

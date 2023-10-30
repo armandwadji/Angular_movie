@@ -1,7 +1,7 @@
-<!-- <form-movie></form-movie> -->
+<form-movie (searchvalue)="search$$.next($event)" (sort)="sort$$.next($event)"></form-movie>
 
-<div *ngIf="movieList$ | async" class="card-list">
-  <div *ngFor="let movie of movieList$ | async">
+<div *ngIf="movieList()?.length" class="card-list">
+  <div *ngFor="let movie of movieList() ">
     <card-movie [movie]="movie"></card-movie>
   </div>
 </div>

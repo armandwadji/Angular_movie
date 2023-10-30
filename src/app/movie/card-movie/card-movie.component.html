@@ -11,6 +11,11 @@
   <h3>Synopsis</h3>
   <p>{{ movie.description }}</p>
 
-  <div class="btn">Ajouter aux coups de coeur</div>
-  <!-- <div class="btn">Supprimer de la liste</div> -->
+  <div class="btn" *ngIf="!removeList; then thenBlock; else elseBlock"></div>
+  <ng-template #thenBlock>
+    <div class="btn" (click)="toggleHeart()">Ajouter le coups de coeur</div>
+  </ng-template>
+  <ng-template #elseBlock>
+    <div class="btn" (click)="toggleHeart()">Retirer le coups de coeur</div>
+  </ng-template>
 </div>

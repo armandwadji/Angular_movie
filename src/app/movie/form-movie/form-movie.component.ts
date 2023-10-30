@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable, Subject, debounceTime, distinctUntilChanged, switchMap } from "rxjs";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { BehaviorSubject, Observable, Subject, debounceTime, distinctUntilChanged, switchMap } from "rxjs";
 import { Movie } from "../Movie";
 import { MovieService } from '../movie.service';
 
@@ -8,25 +8,32 @@ import { MovieService } from '../movie.service';
   templateUrl: "./form-movie.component.html",
   styles: [],
 })
-export class FormMovieComponent implements OnInit{
-  searchTerms = new Subject<string>();
-  movieList$: Observable<Movie[]>;
-
-  constructor(
-    private readonly movieService : MovieService
-  ){}
+export class FormMovieComponent {
   
-  ngOnInit(): void {
-    
-    this.movieList$ = this.searchTerms.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap(search => this.movieService.searchMovie(search))
-    )
-    
-  }
+  @Output()
+  searchvalue = new EventEmitter<string>()
 
-  search(term: string) { 
-    this.searchTerms.next(term);
-  }
+  @Output()
+  sort = new EventEmitter<string | null>()
+  
+  // searchTerms = new BehaviorSubject<string>( "marvel");
+  // movieList$: Observable<Movie[]>;
+  
+  // constructor(
+  //   private readonly movieService : MovieService
+  // ){}
+  
+  // ngOnInit(): void {
+    
+  //   this.movieList$ = this.searchTerms.pipe(
+  //     debounceTime(300),
+  //     distinctUntilChanged(),
+  //     switchMap(search => this.movieService.searchMovie(search))
+  //   )
+    
+  // }
+
+  // search(term: string) { 
+  //   this.searchTerms.next(term);
+  // }
 }

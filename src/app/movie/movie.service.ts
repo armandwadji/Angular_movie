@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable, catchError, map, of, tap } from "rxjs";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Observable, catchError, map, of } from "rxjs";
 import { Movie } from "./Movie";
 import { MovieApiSerializer } from "./movie-api.serializer";
 
@@ -23,17 +23,34 @@ export class MovieService {
 
   getMovies(): Observable<Movie[]> {
     return this.http.get<object>(`${this.baseUrl}&query=marvel`).pipe(
-      map((data: any) => this.convertMovieList(data)),
+      map((data: object) => this.convertMovieList(data)),
       catchError((error) => this.handleError(error, []))
     );
   }
 
   searchMovie(search: string): Observable<Movie[]> {
-    
-    return this.http.get<Object>(`${this.baseUrl}&query=${search}`).pipe(
-      map((data: any) => this.convertMovieList(data)),
+    const params = new HttpParams().append("query", search);
+
+    return this.http.get<Object>(`${this.baseUrl}`, { params }).pipe(
+      map((data: object) => this.convertMovieList(data)),
       catchError((error) => this.handleError(error, []))
     );
+  }
+
+  getMovieStorage(): Movie[] {
+    const movies = localStorage.getItem("movies");
+    return movies ? JSON.parse(movies) : [];
+  }
+
+  setMovieStorage(movie: Movie): void {
+    const moviesStorage: Movie[] = this.getMovieStorage();
+     
+    if (!moviesStorage.find((currentMovie: Movie) => currentMovie.id === movie.id)) {
+      localStorage.setItem("movies", JSON.stringify([...moviesStorage, movie]));
+    } else {
+      localStorage.setItem("movies", JSON.stringify(moviesStorage.filter(currentMovie => currentMovie.id !== movie.id)));
+      
+    }
   }
 
   private handleError(error: Error, errorValue: any) {

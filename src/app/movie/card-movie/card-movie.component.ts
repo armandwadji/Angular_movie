@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Movie } from '../Movie';
+import { MovieService } from '../movie.service';
 
 @Component({
   selector: 'card-movie',
@@ -8,6 +9,17 @@ import { Movie } from '../Movie';
   ]
 })
 export class CardMovieComponent {
+  @Input({required: true})
+  movie: Movie
+
   @Input()
-  movie:Movie
+  removeList:boolean
+
+  constructor(
+    private readonly movieService: MovieService
+  ){}
+  
+  toggleHeart() {
+    this.movieService.setMovieStorage(this.movie);
+  }
 }

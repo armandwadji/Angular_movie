@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -6,10 +7,10 @@ import { Component } from '@angular/core';
     <header class="header">
       <nav>
         <ul>
-          <a href="#">
+          <a (click)="goToHome()">
             <li>Acceuil</li>
           </a>
-          <a href="#">
+          <a (click)="goToFavories()">
             <li>Coup de coeur</li>
           </a>
         </ul>
@@ -21,5 +22,17 @@ import { Component } from '@angular/core';
   ]
 })
 export class HeaderComponent {
+
+  constructor(
+    private readonly router: Router
+  ){}
+
+  goToHome() {
+    this.router.navigate(["movies"]);
+  }
+
+  goToFavories() {
+    this.router.navigate(["favories"]);
+  }
 
 }

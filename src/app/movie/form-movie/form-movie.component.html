@@ -1,14 +1,14 @@
 <div class="form-component">
   <div class="form-container">
     <form>
-      <input type="text" placeholder="Entrez le titre d'un film" id="search-input" #term (keyup)="search(term.value)"/>
-      <input type="submit" value="rechercher" />
+      <input type="text" placeholder="Entrez le titre d'un film" #term (keyup)="searchvalue.emit(term.value)"/>
     </form>
     <div class="btn-sort-container">
-      <div class="btn_sort" id="goodToBad">Top <span>&#8594;</span></div>
-      <div class="btn_sort" id="badToGood">Flop <span>&#8594;</span></div>
+      <div class="btn_sort" name="goodToBad" [className]="'goodToBad '+ ((sort | async) === 'goodToBad' ? 'active' : '')" #top (click)="sort.emit(top.getAttribute('name'))">Top <span>&#8594;</span></div>
+      <div class="btn_sort" name="badToGood" [className]="'badToGood '+ ((sort | async) === 'badToGood' ? 'active' : '')" #flop (click)="sort.emit(flop.getAttribute('name'))">Flop <span>&#8594;</span></div>
     </div>
   </div>
 </div>
 
-<list-movie [movieList$]="movieList$" ></list-movie>
+<!-- (keyup)="search(term.value)"  -->
+<!-- <list-movie [movieList$]="movieList$" ></list-movie> -->
