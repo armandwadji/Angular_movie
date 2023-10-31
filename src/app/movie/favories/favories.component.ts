@@ -16,7 +16,7 @@ export class FavoriesComponent implements OnInit {
   ) { }
   
   ngOnInit(): void {
-    this.movieList = this.movieService.getMovieStorage();
+    this.movieList = this.movieService.movieStorage;
   }
 
 }

@@ -28,8 +28,8 @@ export class MovieService {
     );
   }
 
-  searchMovie(search: string): Observable<Movie[]> {
-    const params = new HttpParams().append("query", search);
+  searchMovie(search: string, page: number = 2): Observable<Movie[]> {
+    const params = new HttpParams().append("query", search).append("page", page);
 
     return this.http.get<Object>(`${this.baseUrl}`, { params }).pipe(
       map((data: object) => this.convertMovieList(data)),
@@ -37,13 +37,13 @@ export class MovieService {
     );
   }
 
-  getMovieStorage(): Movie[] {
+  public get movieStorage(): Movie[] {
     const movies = localStorage.getItem("movies");
     return movies ? JSON.parse(movies) : [];
   }
 
-  setMovieStorage(movie: Movie): void {
-    const moviesStorage: Movie[] = this.getMovieStorage();
+  public set movieStorage(movie: Movie) {
+    const moviesStorage: Movie[] = this.movieStorage;
      
     if (!moviesStorage.find((currentMovie: Movie) => currentMovie.id === movie.id)) {
       localStorage.setItem("movies", JSON.stringify([...moviesStorage, movie]));

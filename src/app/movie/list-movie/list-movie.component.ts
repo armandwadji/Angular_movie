@@ -20,6 +20,7 @@ export class ListMovieComponent {
 
   search$$ = new Subject<string>(); // BehaviorSubject permet de créer un observable auquel on peut souscrire tout en ayant une valeur initial
   sort$$ = new BehaviorSubject<string | null>("goodToBad")
+  visible$$ = new Subject<HTMLElement>();
 
   movieList: Signal< Movie[] | undefined> = toSignal(
     this.sort$$.pipe(
@@ -40,4 +41,8 @@ export class ListMovieComponent {
       )
     )
   );
+
+  onVisible(font : any) {
+    console.log(font);
+  }
 }

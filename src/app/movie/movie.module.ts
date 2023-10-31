@@ -7,6 +7,7 @@ import { MovieGenrePipe } from './movie-genre.pipe';
 import { FormMovieComponent } from './form-movie/form-movie.component';
 import { CardMovieComponent } from './card-movie/card-movie.component';
 import { FavoriesComponent } from './favories/favories.component';
+import { InfiniteScrollDirective } from './infinite-scroll.directive';
 
 const movieRoutes: Routes = [
   { path: 'movies', component: ListMovieComponent },
@@ -14,7 +15,7 @@ const movieRoutes: Routes = [
 ]
 
 @NgModule({
-  declarations: [ListMovieComponent, MovieGenrePipe, FormMovieComponent, CardMovieComponent, FavoriesComponent],
+  declarations: [ListMovieComponent, MovieGenrePipe, FormMovieComponent, CardMovieComponent, FavoriesComponent, InfiniteScrollDirective],
   imports: [CommonModule, RouterModule.forChild(movieRoutes)],
   providers: [MovieService],
 })

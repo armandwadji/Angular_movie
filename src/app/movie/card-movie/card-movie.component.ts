@@ -20,6 +20,6 @@ export class CardMovieComponent {
   ){}
   
   toggleHeart() {
-    this.movieService.setMovieStorage(this.movie);
+    this.movieService.movieStorage = this.movie;
   }
 }
