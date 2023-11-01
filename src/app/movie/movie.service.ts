@@ -28,7 +28,7 @@ export class MovieService {
     );
   }
 
-  searchMovie(search: string, page: number = 2): Observable<Movie[]> {
+  searchMovie(search: string, page: number): Observable<Movie[]> {
     const params = new HttpParams().append("query", search).append("page", page);
 
     return this.http.get<Object>(`${this.baseUrl}`, { params }).pipe(
