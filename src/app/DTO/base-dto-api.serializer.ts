@@ -1,6 +1,6 @@
 import { IBaseDto } from "./ibase.dto";
 
-export abstract class BaseApiDtoSerializer<T extends IBaseDto> {
+export abstract class BaseApiDtoSerializer<T> {
     // Convertit l'objet provenant du serveur en objet de type T
     public fromJson(object: any): T {
       return object as T;

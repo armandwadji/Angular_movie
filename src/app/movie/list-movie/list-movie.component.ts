@@ -5,13 +5,11 @@ import {
   debounceTime,
   distinctUntilChanged,
   map,
-  switchMap,
-  filter,
-  Subject,
-  startWith,
+  switchMap
 } from "rxjs";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { MovieService } from "../movie.service";
+import { ApiResponseDto } from '../../DTO/api-response.dto';
 
 @Component({
   selector: "list-movie",
@@ -25,32 +23,34 @@ export class ListMovieComponent {
   // movieList$: Observable<Movie[]>;
 
   page: number = 1;
-  movies: Movie[] = [];
-  search$$ = new Subject<string>(); // BehaviorSubject permet de créer un observable auquel on peut souscrire tout en ayant une valeur initial
-  sort$$ = new BehaviorSubject<string | null>("goodToBad");
+  totalPage: number = 1;
+  search$$ = new BehaviorSubject<string>("marvel"); // BehaviorSubject permet de créer un observable auquel on peut souscrire tout en ayant une valeur initial
+  sort$$ = new BehaviorSubject<string | null>(null);
   page$$ = new BehaviorSubject<number>(1);
 
+
   movieList: Signal<Movie[] | undefined> = toSignal(
+    
     this.page$$.pipe(
-      startWith(1),
+      distinctUntilChanged(),
       switchMap((page) =>
         this.sort$$.pipe(
-          filter(Boolean),
           distinctUntilChanged(), //Je prend en considération le trie que lorsque l'utilsateur clique sur des tris différents
           switchMap((sort) =>
             this.search$$.pipe(
-              startWith("marvel"),
               debounceTime(300),
-              distinctUntilChanged(),
-              switchMap((search: string) =>
-                this.movieService.searchMovie(search || "marvel", page)
-              ),
-              map((movieList: Movie[]) => {
-                this.movies = [...this.movies, ...movieList];
-                return this.movies.sort((a, b) => {
-                  if (sort === "goodToBad") return b.moyenne - a.moyenne;
-                  else return a.moyenne - b.moyenne;
-                });
+              distinctUntilChanged((prev, next) => {
+                if (prev !== next) {
+                  this.page = 1;
+                  this.page$$.next(this.page)
+                }
+                return prev === next
+              }),
+              switchMap((search: string) => this.movieService.searchMovie(search || "marvel", page)),
+              map(({page, results: movieList, total_pages, total_results}: ApiResponseDto) => {
+                
+                this.totalPage = total_pages;
+                return movieList.sort((a:any, b:any) => { if (sort === "goodToBad") return b.moyenne - a.moyenne; else return a.moyenne - b.moyenne; })
               })
             )
           )
@@ -59,8 +59,20 @@ export class ListMovieComponent {
     )
   );
 
-  onVisible(font: any) {
+  onVisible() {
     this.page++;
+    this.page$$.next(this.page);
+  }
+
+  nextpage() {
+    this.page++;
+    this.page$$.next(this.page);
+  }
+
+  previousPage() {
+    if (this.page > 1) {
+      this.page--;
+    }
     this.page$$.next(this.page);
   }
 }

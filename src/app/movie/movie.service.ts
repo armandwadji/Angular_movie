@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable, catchError, map, of } from "rxjs";
 import { Movie } from "./Movie";
 import { MovieApiSerializer } from "./movie-api.serializer";
+import { ApiResponseDto } from "../DTO/api-response.dto";
+import { MovieResponseApiSerializer } from "./movie-response-api.serializer";
 
 @Injectable({
   providedIn: "root",
@@ -12,27 +14,30 @@ export class MovieService {
 
   constructor(
     private readonly http: HttpClient,
-    private readonly movieApiSerialiser: MovieApiSerializer
+    private readonly movieApiSerialiser: MovieApiSerializer,
+    private readonly movieResponseApiSerializer: MovieResponseApiSerializer,
   ) {}
 
-  private convertMovieList(response: any): Movie[] {
-    return response.results.map((movie: any) =>
-      this.movieApiSerialiser.fromJson(movie)
-    );
+  private convertMovieList(response: ApiResponseDto): Movie[] {
+    return response.results.map((movie: any) => this.movieApiSerialiser.fromJson(movie));
   }
 
-  getMovies(): Observable<Movie[]> {
+  private convertMovieResponse(response: ApiResponseDto): ApiResponseDto {
+    return  this.movieResponseApiSerializer.fromJson(response);
+  }
+
+  public getMovies(): Observable<Movie[]> {
     return this.http.get<object>(`${this.baseUrl}&query=marvel`).pipe(
-      map((data: object) => this.convertMovieList(data)),
+      map((data: any) => this.convertMovieList(data)),
       catchError((error) => this.handleError(error, []))
     );
   }
 
-  searchMovie(search: string, page: number): Observable<Movie[]> {
-    const params = new HttpParams().append("query", search).append("page", page);
+  public searchMovie(search: string, page: number): Observable<ApiResponseDto> {
+    const params = new HttpParams().append("query", search).append("page", page || 1);
 
     return this.http.get<Object>(`${this.baseUrl}`, { params }).pipe(
-      map((data: object) => this.convertMovieList(data)),
+      map((data: any) => this.convertMovieResponse(data)),
       catchError((error) => this.handleError(error, []))
     );
   }

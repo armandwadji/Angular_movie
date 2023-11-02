@@ -5,9 +5,16 @@
     <card-movie [movie]="movie"></card-movie>
   </div>
 </div>
-<div
+
+<div class="pagination-container">
+  <button class="pagination-increase" [disabled]="page===1" (click)="previousPage()" >&lt;</button>
+  <span class="pagination-count"> {{page}} / {{totalPage}} </span>
+  <button class="pagination-decrease" [disabled]="(page === totalPage)" (click)="nextpage()">&gt;</button>
+</div>
+
+
+<!-- <div
 appInfiniteScroll
 [debounceTime]="300"
-(visible)="onVisible($event)"
->Loading...</div>
-
+(visible)="onVisible()"
+>Loading...</div> -->
