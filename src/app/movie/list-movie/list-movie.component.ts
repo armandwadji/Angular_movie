@@ -1,12 +1,6 @@
 import { Component, Signal } from "@angular/core";
 import { Movie } from "../Movie";
-import {
-  BehaviorSubject,
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  switchMap
-} from "rxjs";
+import { BehaviorSubject, debounceTime, distinctUntilChanged, map, switchMap } from "rxjs";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { MovieService } from "../movie.service";
 import { ApiResponseDto } from '../../DTO/api-response.dto';
@@ -18,9 +12,6 @@ import { ApiResponseDto } from '../../DTO/api-response.dto';
 })
 export class ListMovieComponent {
   constructor(private readonly movieService: MovieService) {}
-
-  // @Input()
-  // movieList$: Observable<Movie[]>;
 
   page: number = 1;
   totalPage: number = 1;
@@ -48,7 +39,6 @@ export class ListMovieComponent {
               }),
               switchMap((search: string) => this.movieService.searchMovie(search || "marvel", page)),
               map(({page, results: movieList, total_pages, total_results}: ApiResponseDto) => {
-                
                 this.totalPage = total_pages;
                 return movieList.sort((a:any, b:any) => { if (sort === "goodToBad") return b.moyenne - a.moyenne; else return a.moyenne - b.moyenne; })
               })

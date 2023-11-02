@@ -13,9 +13,9 @@
 
   <div class="btn" *ngIf="!removeList; then thenBlock; else elseBlock"></div>
   <ng-template #thenBlock>
-    <div class="btn" (click)="toggleHeart()" (click)="getFavoriteMovies.emit()">Ajouter le coups de coeur</div>
+    <div class="btn" (click)="getMovieStorage()">Ajouter le coups de coeur</div>
   </ng-template>
   <ng-template #elseBlock>
-    <div class="btn" (click)="toggleHeart()" (click)="getFavoriteMovies.emit()">Retirer le coups de coeur</div>
+    <div class="btn" (click)="getMovieStorage()">Retirer le coups de coeur</div>
   </ng-template>
 </div>

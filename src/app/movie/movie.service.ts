@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable, catchError, map, of } from "rxjs";
 import { Movie } from "./Movie";
@@ -11,6 +11,7 @@ import { MovieResponseApiSerializer } from "./movie-response-api.serializer";
 })
 export class MovieService {
   baseUrl = "https://api.themoviedb.org/3/search/movie?api_key=0d35c2af84390857eb8ff45e611f310d&language=fr-FR";
+  favoriesMovies = signal<Movie[]>(this.movieStorage)
 
   constructor(
     private readonly http: HttpClient,
@@ -40,6 +41,10 @@ export class MovieService {
       map((data: any) => this.convertMovieResponse(data)),
       catchError((error) => this.handleError(error, []))
     );
+  }
+
+  public updateFavoriesMovies() {
+    this.favoriesMovies.update( _ =>  this.movieStorage)
   }
 
   public get movieStorage(): Movie[] {

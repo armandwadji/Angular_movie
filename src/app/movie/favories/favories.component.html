@@ -1,8 +1,8 @@
-<div *ngIf="movieList?.length" class="card-list">
-  <div *ngFor="let movie of movieList">
-    <card-movie [movie]="movie" [removeList]="true" (getFavoriteMovies)="getMovieStorage()"></card-movie>
+<div *ngIf="favoriesMovies?.length" class="card-list">
+  <div *ngFor="let movie of favoriesMovies">
+    <card-movie [movie]="movie" [removeList]="true"></card-movie>
   </div>
 </div>
-<div *ngIf="!movieList?.length" class="card-list">
+<div *ngIf="!favoriesMovies?.length" class="card-list">
   <p>Vous n'avez pas encore de favoris</p>
 </div>

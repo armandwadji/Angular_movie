@@ -1,26 +1,16 @@
-import { Component, OnInit, Output } from '@angular/core';
-import { Movie } from '../Movie';
-import { MovieService } from '../movie.service';
+import { Component, effect } from "@angular/core";
+import { Movie } from "../Movie";
+import { MovieService } from "../movie.service";
 
 @Component({
-  selector: 'app-favories',
-  templateUrl: './favories.component.html',
-  styles: [
-  ]
+  selector: "app-favories",
+  templateUrl: "./favories.component.html",
+  styles: [],
 })
-export class FavoriesComponent implements OnInit {
-  movieList: Movie[]
-  
-  constructor(
-    private readonly movieService : MovieService
-  ) { }
-  
-  ngOnInit(): void {
-    this.movieList = this.movieService.movieStorage;
-  }
+export class FavoriesComponent {
+  favoriesMovies: Movie[];
 
-  getMovieStorage() {
-    this.movieList = this.movieService.movieStorage;
+  constructor(private readonly movieService: MovieService) {
+    effect( _ =>  this.favoriesMovies = this.movieService.favoriesMovies() );
   }
-
 }
