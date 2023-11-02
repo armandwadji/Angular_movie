@@ -7,10 +7,10 @@ import { Router } from '@angular/router';
     <header class="header">
       <nav>
         <ul>
-          <a (click)="goToHome()">
+          <a routerLink="movies" routerLinkActive="active" (click)="goToHome()">
             <li>Acceuil</li>
           </a>
-          <a (click)="goToFavories()">
+          <a routerLink="favories" routerLinkActive="active" (click)="goToFavories()">
             <li>Coup de coeur</li>
           </a>
         </ul>

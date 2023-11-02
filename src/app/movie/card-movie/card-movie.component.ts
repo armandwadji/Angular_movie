@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Movie } from '../Movie';
 import { MovieService } from '../movie.service';
 
@@ -13,8 +13,11 @@ export class CardMovieComponent {
   movie: Movie
 
   @Input()
-  removeList:boolean
-
+  removeList: boolean
+  
+  @Output()
+  getFavoriteMovies= new EventEmitter<HTMLElement>()
+  
   constructor(
     private readonly movieService: MovieService
   ){}
@@ -22,4 +25,5 @@ export class CardMovieComponent {
   toggleHeart() {
     this.movieService.movieStorage = this.movie;
   }
+
 }

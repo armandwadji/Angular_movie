@@ -8,14 +8,21 @@ import { FormMovieComponent } from './form-movie/form-movie.component';
 import { CardMovieComponent } from './card-movie/card-movie.component';
 import { FavoriesComponent } from './favories/favories.component';
 import { InfiniteScrollDirective } from './infinite-scroll.directive';
+import { LoaderComponent } from './loader/loader.component';
 
 const movieRoutes: Routes = [
-  { path: 'movies', component: ListMovieComponent },
-  { path: 'favories', component: FavoriesComponent }
+  {
+    path: 'movies',
+    component: ListMovieComponent
+  },
+  {
+    path: 'favories',
+    component: FavoriesComponent
+  }
 ]
 
 @NgModule({
-  declarations: [ListMovieComponent, MovieGenrePipe, FormMovieComponent, CardMovieComponent, FavoriesComponent, InfiniteScrollDirective],
+  declarations: [ListMovieComponent, MovieGenrePipe, FormMovieComponent, CardMovieComponent, FavoriesComponent, InfiniteScrollDirective, LoaderComponent],
   imports: [CommonModule, RouterModule.forChild(movieRoutes)],
   providers: [MovieService],
 })

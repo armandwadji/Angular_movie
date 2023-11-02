@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { Movie } from '../Movie';
 import { MovieService } from '../movie.service';
 
@@ -16,6 +16,10 @@ export class FavoriesComponent implements OnInit {
   ) { }
   
   ngOnInit(): void {
+    this.movieList = this.movieService.movieStorage;
+  }
+
+  getMovieStorage() {
     this.movieList = this.movieService.movieStorage;
   }
 
