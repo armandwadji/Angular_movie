@@ -1,13 +1,17 @@
 <div class="form-component">
   <div class="form-container">
-    <form>
-      <input type="text" placeholder="Entrez le titre d'un film" #term (keyup)="searchvalue.emit(term.value)"/>
+    <form [formGroup]="search">
+      <input type="text" placeholder="Entrez le titre d'un film" #term (keyup)="searchvalue.emit(term.value)" formControlName="name"/>
+      <div class="btn-sort-container">
+        <div class="btn_sort" name="goodToBad" formControlName="sort" [className]="'goodToBad '+ ((sort | async) === 'goodToBad' ? 'active' : '')" #top (click)="sort.emit(top.getAttribute('name'))">Top <span>&#8594;</span></div>
+        <div class="btn_sort" name="badToGood" formControlName="sort" [className]="'badToGood '+ ((sort | async) === 'badToGood' ? 'active' : '')" #flop (click)="sort.emit(flop.getAttribute('name'))">Flop <span>&#8594;</span></div>
+      </div>
     </form>
-    <div class="btn-sort-container">
-      <div class="btn_sort" name="goodToBad" [className]="'goodToBad '+ ((sort | async) === 'goodToBad' ? 'active' : '')" #top (click)="sort.emit(top.getAttribute('name'))">Top <span>&#8594;</span></div>
-      <div class="btn_sort" name="badToGood" [className]="'badToGood '+ ((sort | async) === 'badToGood' ? 'active' : '')" #flop (click)="sort.emit(flop.getAttribute('name'))">Flop <span>&#8594;</span></div>
-    </div>
   </div>
+</div>
+
+<div *ngIf=" movieList$ | async ">
+  <p>{{movieList$ | async}}</p>
 </div>
 
 <!-- (keyup)="search(term.value)"  -->

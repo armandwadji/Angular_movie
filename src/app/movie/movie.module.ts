@@ -22,8 +22,8 @@ const movieRoutes: Routes = [
 ]
 
 @NgModule({
-  declarations: [ListMovieComponent, MovieGenrePipe, FormMovieComponent, CardMovieComponent, FavoriesComponent, InfiniteScrollDirective, LoaderComponent],
-  imports: [CommonModule, RouterModule.forChild(movieRoutes)],
+  declarations: [ListMovieComponent, MovieGenrePipe, CardMovieComponent, FavoriesComponent, InfiniteScrollDirective, LoaderComponent],
+  imports: [CommonModule, FormMovieComponent, RouterModule.forChild(movieRoutes)],
   providers: [MovieService],
 })
 export class MovieModule { }

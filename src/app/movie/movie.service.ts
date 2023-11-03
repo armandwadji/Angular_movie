@@ -10,21 +10,24 @@ import { MovieResponseApiSerializer } from "./movie-response-api.serializer";
   providedIn: "root",
 })
 export class MovieService {
-  baseUrl = "https://api.themoviedb.org/3/search/movie?api_key=0d35c2af84390857eb8ff45e611f310d&language=fr-FR";
-  favoriesMovies = signal<Movie[]>(this.movieStorage)
+  baseUrl =
+    "https://api.themoviedb.org/3/search/movie?api_key=0d35c2af84390857eb8ff45e611f310d&language=fr-FR";
+  favoriesMovies = signal<Movie[]>(this.movieStorage);
 
   constructor(
     private readonly http: HttpClient,
     private readonly movieApiSerialiser: MovieApiSerializer,
-    private readonly movieResponseApiSerializer: MovieResponseApiSerializer,
+    private readonly movieResponseApiSerializer: MovieResponseApiSerializer
   ) {}
 
   private convertMovieList(response: ApiResponseDto): Movie[] {
-    return response.results.map((movie: any) => this.movieApiSerialiser.fromJson(movie));
+    return response.results.map((movie: any) =>
+      this.movieApiSerialiser.fromJson(movie)
+    );
   }
 
   private convertMovieResponse(response: ApiResponseDto): ApiResponseDto {
-    return  this.movieResponseApiSerializer.fromJson(response);
+    return this.movieResponseApiSerializer.fromJson(response);
   }
 
   public getMovies(): Observable<Movie[]> {
@@ -34,8 +37,13 @@ export class MovieService {
     );
   }
 
-  public searchMovie(search: string, page: number): Observable<ApiResponseDto> {
-    const params = new HttpParams().append("query", search).append("page", page || 1);
+  public searchMovie(
+    search: string = "marvel",
+    page: number = 1
+  ): Observable<ApiResponseDto> {
+    const params = new HttpParams()
+      .append("query", search)
+      .append("page", page || 1);
 
     return this.http.get<Object>(`${this.baseUrl}`, { params }).pipe(
       map((data: any) => this.convertMovieResponse(data)),
@@ -44,7 +52,7 @@ export class MovieService {
   }
 
   public updateFavoriesMovies() {
-    this.favoriesMovies.update( _ =>  this.movieStorage)
+    this.favoriesMovies.update((_) => this.movieStorage);
   }
 
   public get movieStorage(): Movie[] {
@@ -54,12 +62,18 @@ export class MovieService {
 
   public set movieStorage(movie: Movie) {
     const moviesStorage: Movie[] = this.movieStorage;
-     
-    if (!moviesStorage.find((currentMovie: Movie) => currentMovie.id === movie.id)) {
+
+    if (
+      !moviesStorage.find((currentMovie: Movie) => currentMovie.id === movie.id)
+    ) {
       localStorage.setItem("movies", JSON.stringify([...moviesStorage, movie]));
     } else {
-      localStorage.setItem("movies", JSON.stringify(moviesStorage.filter(currentMovie => currentMovie.id !== movie.id)));
-      
+      localStorage.setItem(
+        "movies",
+        JSON.stringify(
+          moviesStorage.filter((currentMovie) => currentMovie.id !== movie.id)
+        )
+      );
     }
   }
 
