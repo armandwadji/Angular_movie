@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, computed, signal } from "@angular/core";
 import {
   BehaviorSubject,
   Observable,
   Subject,
+  Subscription,
   combineLatest,
   debounceTime,
   distinctUntilChanged,
@@ -15,6 +16,7 @@ import { MovieService } from "../movie.service";
 import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { ApiResponseDto } from "src/app/DTO/api-response.dto";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "form-movie",
@@ -29,13 +31,28 @@ export class FormMovieComponent {
 
   @Output()
   sort = new EventEmitter<string | null>();
+  
+  @Output()
+  movieList: Movie[] = [];
 
   search = this.fb.nonNullable.group({
     name: [""],
-    sort:[''],
+    sort: [''],
   });
 
+ // *************** LES SIGNAUX ***************
+  name = signal("marvel");
+  trie = signal('');
+  page = signal(1);
+  message = computed(() => `recherche ${this.name()} page : ${this.page()} trie : ${this.trie()}`);
+  test = computed(() => this.movieService.searchMovie(this.name(), this.page()).pipe(
+    debounceTime(300),
+    map(({ results }: ApiResponseDto) => results.sort((a:Movie, b:Movie) => { if (this.trie() === "goodToBad") return b.moyenne - a.moyenne; else return a.moyenne - b.moyenne; }))
+  ))
+   // *************** LES SIGNAUX ***************
+
   movieList$: Observable<any> = this.getMovies();
+  sort$: Observable<any> = this.sortMovies();
   
   constructor(
     private readonly movieService: MovieService,
@@ -43,21 +60,44 @@ export class FormMovieComponent {
   ) { }
   
   private getMovies(): Observable<any>{
-    const movieList$ = this.movieService.getMovies();
-    const searchName$ = this.search.controls.name.valueChanges.pipe(startWith('marvel'));
-    const sort$ = this.search.controls.sort.valueChanges;
-    return combineLatest([searchName$, sort$]).pipe(
-      map(([name, sort]) => {
-        this.movieService.searchMovie(name);
-        console.log({ name, sort});
-        return name
-      })
+    const filter$ = combineLatest([
+      this.search.controls.name.valueChanges.pipe(startWith('marvel')),
+    ]).pipe(debounceTime(300));
+
+    return filter$.pipe(
+      // switchMap(([search]) => this.movieService.searchMovie(search, this.page())),
+      // map(({ results }: ApiResponseDto) => this.movieList = results)
     )
   }
+  
 
-  setSort() {
-    this.search.setValue({name:"", sort: ""})
+  private sortMovies() {
+    const filter$ = combineLatest([
+      this.search.controls.sort.valueChanges.pipe(debounceTime(300))
+    ]);
+
+    return filter$.pipe(
+      switchMap(([sort]) => {
+        console.log(this.movieList);
+        return this.movieList.sort((a: any, b: any) => { if (sort === "goodToBad") return b.moyenne - a.moyenne; else return a.moyenne - b.moyenne; })
+      })
+    );
   }
+
+  increment() {
+    this.page.update(page => page + 1);
+  }
+
+  decrement() {
+    this.page.update(page => page > 1 ? page - 1 : 1)
+  }
+
+  // setSort(sort:string) {
+  //   const name = this.search.get('name')?.value || '';
+  //   console.log(name);
+  //   this.search.setValue({name, sort})
+    
+  // }
     
   // searchTerms = new BehaviorSubject<string>( "marvel");
   // ngOnInit(): void {

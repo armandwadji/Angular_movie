@@ -20,34 +20,34 @@ export class ListMovieComponent {
   page$$ = new BehaviorSubject<number>(1);
 
 
-  movieList: Signal<Movie[] | undefined> = toSignal(
+  // movieList: Signal<Movie[] | undefined> = toSignal(
     
-    this.page$$.pipe(
-      distinctUntilChanged(),
-      switchMap((page) =>
-        this.sort$$.pipe(
-          distinctUntilChanged(), //Je prend en considération le trie que lorsque l'utilsateur clique sur des tris différents
-          switchMap((sort) =>
-            this.search$$.pipe(
-              debounceTime(300),
-              distinctUntilChanged((prev, next) => {
-                if (prev !== next) {
-                  this.page = 1;
-                  this.page$$.next(this.page)
-                }
-                return prev === next
-              }),
-              switchMap((search: string) => this.movieService.searchMovie(search || "marvel", page)),
-              map(({page, results: movieList, total_pages, total_results}: ApiResponseDto) => {
-                this.totalPage = total_pages;
-                return movieList.sort((a:any, b:any) => { if (sort === "goodToBad") return b.moyenne - a.moyenne; else return a.moyenne - b.moyenne; })
-              })
-            )
-          )
-        )
-      )
-    )
-  );
+  //   this.page$$.pipe(
+  //     distinctUntilChanged(),
+  //     switchMap((page) =>
+  //       this.sort$$.pipe(
+  //         distinctUntilChanged(), //Je prend en considération le trie que lorsque l'utilsateur clique sur des tris différents
+  //         switchMap((sort) =>
+  //           this.search$$.pipe(
+  //             debounceTime(300),
+  //             distinctUntilChanged((prev, next) => {
+  //               if (prev !== next) {
+  //                 this.page = 1;
+  //                 this.page$$.next(this.page)
+  //               }
+  //               return prev === next
+  //             }),
+  //             switchMap((search: string) => this.movieService.searchMovie(search || "marvel", page)),
+  //             map(({page, results: movieList, total_pages, total_results}: ApiResponseDto) => {
+  //               this.totalPage = total_pages;
+  //               return movieList.sort((a:any, b:any) => { if (sort === "goodToBad") return b.moyenne - a.moyenne; else return a.moyenne - b.moyenne; })
+  //             })
+  //           )
+  //         )
+  //       )
+  //     )
+  //   )
+  // );
 
   onVisible() {
     this.page++;

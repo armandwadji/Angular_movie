@@ -1,18 +1,45 @@
 <div class="form-component">
   <div class="form-container">
     <form [formGroup]="search">
-      <input type="text" placeholder="Entrez le titre d'un film" #term (keyup)="searchvalue.emit(term.value)" formControlName="name"/>
-      <div class="btn-sort-container">
-        <div class="btn_sort" name="goodToBad" formControlName="sort" [className]="'goodToBad '+ ((sort | async) === 'goodToBad' ? 'active' : '')" #top (click)="sort.emit(top.getAttribute('name'))">Top <span>&#8594;</span></div>
-        <div class="btn_sort" name="badToGood" formControlName="sort" [className]="'badToGood '+ ((sort | async) === 'badToGood' ? 'active' : '')" #flop (click)="sort.emit(flop.getAttribute('name'))">Flop <span>&#8594;</span></div>
+      <input type="text" placeholder="Entrez le titre d'un film"  #term (keyup)="name.set(term.value)" (keyup)="searchvalue.emit(term.value)" formControlName="name"/>
+      <!-- <div class="btn-sort-container">
+        <div class="btn_sort" (click)="setSort('goodToBad')" name="goodToBad" formControlName="sort" [className]="'goodToBad '+ ((sort | async) === 'goodToBad' ? 'active' : '')" #top (click)="sort.emit(top.getAttribute('name'))">Top <span>&#8594;</span></div>
+        <div class="btn_sort" (click)="setSort('badToGood')" name="badToGood" formControlName="sort" [className]="'badToGood '+ ((sort | async) === 'badToGood' ? 'active' : '')" #flop (click)="sort.emit(flop.getAttribute('name'))">Flop <span>&#8594;</span></div>
+      </div> -->
+
+      <!-- SORT BUTTONS -->
+      <div class="btn-sort-container"> 
+          <input type="radio" id="goodToBad" #top (change)="trie.set(top.value)" name="sort" value="goodToBad" formControlName="sort" checked style="display: none;"/>
+          <label class="btn_sort goodToBad" for="goodToBad">Top <span>&#8594;</span></label>
+      
+          <input type="radio" id="badToGood" #flop (change)="trie.set(flop.value)" name="sort" value="badToGood" formControlName="sort" style="display: none;">
+          <label class="btn_sort badToGood"  for="badToGood">Flop <span>&#8594;</span></label>
       </div>
+
     </form>
   </div>
 </div>
 
-<div *ngIf=" movieList$ | async ">
-  <p>{{movieList$ | async}}</p>
-</div>
+<!-- <div *ngIf=" (movieList$ | async) || (sort$ |async) ">
+  <div *ngFor="let movie of movieList ">
+    <p>{{movie.title}}</p>
+  </div>
+</div> -->
 
+<!-- <div *ngIf=" (test() | async)"> -->
+  <div *ngFor="let movie of (test() | async) ">
+    <p>{{movie.title}}</p>
+  </div>
+<!-- </div> -->
+
+
+
+<!-- PAGINATION -->
+<div class="pagination-container">
+  <button [class]="'pagination-change pagination-decrease ' " (click)="decrement()">&lt;</button>
+  <span class="pagination-count"> {{page()}}  </span>
+  <button [class]="'pagination-change pagination-increase '" (click)="increment()" >&gt;</button>
+</div>
+<p>{{ message() }} </p>
 <!-- (keyup)="search(term.value)"  -->
 <!-- <list-movie [movieList$]="movieList$" ></list-movie> -->
