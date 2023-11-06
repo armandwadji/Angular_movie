@@ -39,7 +39,8 @@ export class MovieService {
 
   public searchMovie(
     search: string = "marvel",
-    page: number = 1
+    page: number = 1,
+    sort:string = 'goodtoBad'
   ): Observable<ApiResponseDto> {
     const params = new HttpParams()
       .append("query", search)

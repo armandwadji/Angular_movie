@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, computed, signal } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, computed, effect, signal } from "@angular/core";
 import {
   BehaviorSubject,
   Observable,
@@ -33,7 +33,7 @@ export class FormMovieComponent {
   sort = new EventEmitter<string | null>();
   
   @Output()
-  movieList: Movie[] = [];
+  movieList:any;
 
   search = this.fb.nonNullable.group({
     name: [""],
@@ -45,10 +45,15 @@ export class FormMovieComponent {
   trie = signal('');
   page = signal(1);
   message = computed(() => `recherche ${this.name()} page : ${this.page()} trie : ${this.trie()}`);
-  test = computed(() => this.movieService.searchMovie(this.name(), this.page()).pipe(
-    debounceTime(300),
-    map(({ results }: ApiResponseDto) => results.sort((a:Movie, b:Movie) => { if (this.trie() === "goodToBad") return b.moyenne - a.moyenne; else return a.moyenne - b.moyenne; }))
-  ))
+  test = computed(() => {
+    const movieList: Observable<ApiResponseDto> = this.movieService.searchMovie(this.name(), this.page(), this.trie()).pipe(debounceTime(300))
+    return movieList
+      // .subscribe(({ results }: ApiResponseDto) => results.sort((a: Movie, b: Movie) => (this.trie() === "goodToBad") ? b.moyenne - a.moyenne : a.moyenne - b.moyenne))
+    .pipe(
+      debounceTime(300),
+      map(({ results }: ApiResponseDto) => results.sort((a:Movie, b:Movie) =>  (this.trie() === "goodToBad") ? b.moyenne - a.moyenne : a.moyenne - b.moyenne ))
+    )
+  },)
    // *************** LES SIGNAUX ***************
 
   movieList$: Observable<any> = this.getMovies();
@@ -57,7 +62,11 @@ export class FormMovieComponent {
   constructor(
     private readonly movieService: MovieService,
     private readonly fb: FormBuilder
-  ) { }
+  ) {
+    effect(() => {
+      console.log(this.test);
+    })
+   }
   
   private getMovies(): Observable<any>{
     const filter$ = combineLatest([
