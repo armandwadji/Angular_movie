@@ -10,7 +10,7 @@ import { MovieResponseApiSerializer } from "./movie-response-api.serializer";
   providedIn: "root",
 })
 export class MovieService {
-  baseUrl = "https://api.themoviedb.org/3/search/movie?api_key=0d35c2af84390857eb8ff45e611f310d&language=fr-FR";
+  baseUrl = "https://api.themoviedb.org/3/search/movie?language=fr-FR";
   favoriesMovies = signal<Movie[]>(this.movieStorage)
 
   constructor(
