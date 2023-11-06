@@ -4,20 +4,17 @@
 
 <ng-template #thenBlock>
   <section class="card-list">
-    <article *ngFor="let movie of movieList() ">
-      <card-movie [movie]="movie"></card-movie>
-    </article>
+    <card-movie *ngFor="let movie of movieList() " [movie]="movie" class="card"></card-movie>
   </section>
   <div class="pagination-container">
     <button [class]="'pagination-change pagination-decrease ' + (page === 1 ? 'disabled' : '')" [disabled]="page===1" (click)="previousPage()" >&lt;</button>
     <span class="pagination-count"> {{page}} / {{totalPage}} </span>
     <button [class]="'pagination-change pagination-increase ' + (page === totalPage ? 'disabled' : '')" [disabled]="(page === totalPage)" (click)="nextpage()">&gt;</button>
   </div>
-
 </ng-template>
 
 <ng-template #elseBlock>
-  <loader></loader>
+  <loader class="loader"></loader>
 </ng-template>
 
 <!-- <div

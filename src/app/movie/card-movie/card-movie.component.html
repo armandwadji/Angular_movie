@@ -1,4 +1,4 @@
-<div class="card">
+
   <img [src]="movie.image" [alt]="'affiche de ' + movie.title" />
   <h2>{{ movie.title }}</h2>
   <h5>Sortie le : {{ movie.date | date : "dd/MM/YYYY" }}</h5>
@@ -18,4 +18,3 @@
   <ng-template #elseBlock>
     <div class="btn" (click)="getMovieStorage()">Retirer le coups de coeur</div>
   </ng-template>
-</div>

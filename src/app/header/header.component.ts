@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-header',
+  selector: 'header',
   template: `
-    <header class="header">
       <nav>
         <ul>
           <a routerLink="movies" routerLinkActive="active" (click)="goToHome()">
@@ -16,7 +15,6 @@ import { Router } from '@angular/router';
         </ul>
       </nav>
       <h1>Shaki Movies</h1>
-    </header>
   `,
   styles: [
   ]
