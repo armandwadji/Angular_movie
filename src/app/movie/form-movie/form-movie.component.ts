@@ -1,7 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { BehaviorSubject, Observable, Subject, debounceTime, distinctUntilChanged, switchMap } from "rxjs";
-import { Movie } from "../Movie";
-import { MovieService } from '../movie.service';
+import { Component, EventEmitter, Output } from "@angular/core";
 
 @Component({
   selector: "form-movie",
@@ -15,25 +12,5 @@ export class FormMovieComponent {
 
   @Output()
   sort = new EventEmitter<string | null>()
-  
-  // searchTerms = new BehaviorSubject<string>( "marvel");
-  // movieList$: Observable<Movie[]>;
-  
-  // constructor(
-  //   private readonly movieService : MovieService
-  // ){}
-  
-  // ngOnInit(): void {
-    
-  //   this.movieList$ = this.searchTerms.pipe(
-  //     debounceTime(300),
-  //     distinctUntilChanged(),
-  //     switchMap(search => this.movieService.searchMovie(search))
-  //   )
-    
-  // }
 
-  // search(term: string) { 
-  //   this.searchTerms.next(term);
-  // }
 }

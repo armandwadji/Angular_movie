@@ -59,7 +59,6 @@ export class MovieService {
       localStorage.setItem("movies", JSON.stringify([...moviesStorage, movie]));
     } else {
       localStorage.setItem("movies", JSON.stringify(moviesStorage.filter(currentMovie => currentMovie.id !== movie.id)));
-      
     }
   }
 

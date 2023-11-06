@@ -1,8 +1,22 @@
-<div *ngIf="favoriesMovies?.length" class="card-list">
+<div *ngIf="favoriesMovies?.length; then thenBlock else elseBlock" class="card-list"></div>
+
+<ng-template #thenBlock>
+  <section class="card-list">
+    <div *ngFor="let movie of favoriesMovies">
+      <card-movie [movie]="movie" [removeList]="true"></card-movie>
+    </div>
+  </section>
+</ng-template>
+<ng-template #elseBlock>
+  <p>Vous n'avez pas encore de favoris</p>
+</ng-template>
+
+
+<!-- <div *ngIf="favoriesMovies?.length" class="card-list">
   <div *ngFor="let movie of favoriesMovies">
     <card-movie [movie]="movie" [removeList]="true"></card-movie>
   </div>
 </div>
 <div *ngIf="!favoriesMovies?.length" class="card-list">
   <p>Vous n'avez pas encore de favoris</p>
-</div>
+</div> -->
