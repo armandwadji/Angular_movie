@@ -5,12 +5,13 @@ import { Movie } from "./Movie";
 import { MovieApiSerializer } from "./movie-api.serializer";
 import { ApiResponseDto } from "../DTO/api-response.dto";
 import { MovieResponseApiSerializer } from "./movie-response-api.serializer";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class MovieService {
-  baseUrl = "https://api.themoviedb.org/3/search/movie?language=fr-FR";
+  baseUrl = environment.base_url;
   favoriesMovies = signal<Movie[]>(this.movieStorage)
 
   constructor(
