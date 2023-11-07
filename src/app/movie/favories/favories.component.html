@@ -2,9 +2,7 @@
 
 <ng-template #thenBlock>
   <section class="card-list">
-    <div *ngFor="let movie of favoriesMovies">
-      <card-movie [movie]="movie" [removeList]="true"></card-movie>
-    </div>
+    <card-movie *ngFor="let movie of favoriesMovies" [movie]="movie" [removeList]="true" class="card"></card-movie>
   </section>
 </ng-template>
 <ng-template #elseBlock>
