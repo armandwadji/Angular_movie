@@ -1,4 +1,4 @@
-<div *ngIf="favoriesMovies?.length; then thenBlock else elseBlock" class="card-list"></div>
+<ng-container *ngIf="favoriesMovies?.length; then thenBlock else elseBlock" class="card-list"></ng-container>
 
 <ng-template #thenBlock>
   <section class="card-list">

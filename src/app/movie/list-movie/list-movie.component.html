@@ -1,6 +1,6 @@
 <form-movie (searchvalue)="search$$.next($event)" (sort)="sort$$.next($event)"></form-movie>
 
-<div *ngIf="movieList()?.length; then thenBlock else elseBlock"></div>
+<ng-container *ngIf="movieList()?.length; then thenBlock else elseBlock"></ng-container>
 
 <ng-template #thenBlock>
   <section class="card-list">
