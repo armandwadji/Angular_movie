@@ -27,7 +27,13 @@ export class ListMovieComponent {
 
     movies$: Observable<Movie[]> = toObservable(this.params).pipe(
         debounceTime(300),
-        distinctUntilChanged(),
+        distinctUntilChanged((previous: FilterParam, current: FilterParam)=>{
+            if (previous.search!== current.search && current.page !== 1){
+                this.page.set(1);
+                return previous!== current
+            }
+            return previous === current;
+        }),
         switchMap((param) => this.movieService.getMoviesByPageAndSearch(param.search || 'marvel', param.page)),
         map((apiResponse: ApiResponseDto) => {
             this.totalPage.set(apiResponse.total_pages)
