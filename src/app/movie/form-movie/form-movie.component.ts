@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import {Component, model, ModelSignal} from "@angular/core";
 import {SORT} from "../../enums/sort-enum";
 
 
@@ -8,13 +8,7 @@ import {SORT} from "../../enums/sort-enum";
   styles: [],
 })
 export class FormMovieComponent {
-
   protected readonly SORT = SORT;
-
-  @Output()
-  searchValue = new EventEmitter<string>()
-
-  @Output()
-  sort = new EventEmitter<SORT | null>()
-
+  sort: ModelSignal<SORT | null | undefined> = model();
+  search: ModelSignal<string | null | undefined> = model();
 }

@@ -1,25 +1,24 @@
-<form-movie (searchValue)="search.set($event)" (sort)="sort.set($event)"></form-movie>
+<form-movie [(search)]="search" [(sort)]="sort"></form-movie>
 
-<ng-container *ngIf="movieList(); then thenBlock else elseBlock"></ng-container>
+@if (movieList()){
+    <section class="card-list">
+        @for (movie of movieList(); track movie.id; let idx = $index) {
+            <card-movie [movie]="movie"></card-movie>
+        }
+    </section>
+    <div class="pagination-container">
+        <button [class]="'pagination-change pagination-decrease ' + (page() === 1 ? 'disabled' : '')"
+                [disabled]="page() === 1" (click)="previousPage()">&lt;
+        </button>
+        <span class="pagination-count"> {{ page() }} / {{ totalPage() }} </span>
+        <button [class]="'pagination-change pagination-increase ' + (page() === totalPage() ? 'disabled' : '')"
+                [disabled]="page() === totalPage()" (click)="nextPage()">&gt;
+        </button>
+    </div>
+} @else {
+    <loader class="loader"></loader>
+}
 
-<ng-template #thenBlock>
-  <section class="card-list">
-          <card-movie *ngFor="let movie of movieList() " [movie]="movie"></card-movie>
-  </section>
-  <div class="pagination-container">
-      <button [class]="'pagination-change pagination-decrease ' + (page() === 1 ? 'disabled' : '')"
-              [disabled]="page() === 1" (click)="previousPage()">&lt;
-      </button>
-      <span class="pagination-count"> {{ page() }} / {{ totalPage() }} </span>
-      <button [class]="'pagination-change pagination-increase ' + (page() === totalPage() ? 'disabled' : '')"
-              [disabled]="page() === totalPage()" (click)="nextPage()">&gt;
-      </button>
-  </div>
-</ng-template>
-
-<ng-template #elseBlock>
-  <loader class="loader"></loader>
-</ng-template>
 
 <!-- <div
 appInfiniteScroll

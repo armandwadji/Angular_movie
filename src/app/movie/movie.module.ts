@@ -10,6 +10,7 @@ import {FavoritesComponent} from './favories/favorites.component';
 import {InfiniteScrollDirective} from './infinite-scroll.directive';
 import {LoaderComponent} from './loader/loader.component';
 import {StorageService} from "../services/storage-service";
+import {FormsModule} from "@angular/forms";
 
 const movieRoutes: Routes = [
   {
@@ -24,7 +25,7 @@ const movieRoutes: Routes = [
 
 @NgModule({
   declarations: [ListMovieComponent, MovieGenrePipe, FormMovieComponent, CardMovieComponent, FavoritesComponent, InfiniteScrollDirective, LoaderComponent],
-  imports: [CommonModule, RouterModule.forChild(movieRoutes)],
+    imports: [CommonModule, RouterModule.forChild(movieRoutes), FormsModule],
   providers: [MovieService, StorageService],
 })
 export class MovieModule { }

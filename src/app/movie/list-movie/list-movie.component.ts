@@ -69,10 +69,6 @@ export class ListMovieComponent {
           )
         )*/
 
-  onVisible() {
-      this.page.update((page: number) => this.page() + 1);
-  }
-
   nextPage() {
       this.page.update((page: number) => this.page() + 1);
   }

@@ -1,6 +1,6 @@
-import { Component, effect } from "@angular/core";
-import { Movie } from "../Movie";
-import { MovieService } from "../movie.service";
+import {Component, effect} from "@angular/core";
+import {Movie} from "../Movie";
+import {MovieService} from "../movie.service";
 
 @Component({
   selector: "app-favorites",
@@ -8,7 +8,7 @@ import { MovieService } from "../movie.service";
   styles: [],
 })
 export class FavoritesComponent {
-  favoritesMovies: Movie[];
+  favoritesMovies: Movie[] = [];
 
   constructor(private readonly movieService: MovieService) {
     effect( _ =>  this.favoritesMovies = this.movieService.favoritesMovies() );
