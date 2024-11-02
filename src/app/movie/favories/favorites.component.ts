@@ -3,14 +3,14 @@ import { Movie } from "../Movie";
 import { MovieService } from "../movie.service";
 
 @Component({
-  selector: "app-favories",
-  templateUrl: "./favories.component.html",
+  selector: "app-favorites",
+  templateUrl: "./favorites.component.html",
   styles: [],
 })
-export class FavoriesComponent {
-  favoriesMovies: Movie[];
+export class FavoritesComponent {
+  favoritesMovies: Movie[];
 
   constructor(private readonly movieService: MovieService) {
-    effect( _ =>  this.favoriesMovies = this.movieService.favoriesMovies() );
+    effect( _ =>  this.favoritesMovies = this.movieService.favoritesMovies() );
   }
 }

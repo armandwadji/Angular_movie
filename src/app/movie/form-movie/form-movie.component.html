@@ -1,11 +1,11 @@
 <div class="form-component">
   <div class="form-container">
     <form>
-      <input type="text" placeholder="Entrez le titre d'un film" #term (keyup)="searchvalue.emit(term.value)"/>
+      <input type="text" placeholder="Entrez le titre d'un film" #term (keyup)="searchValue.emit(term.value)"/>
     </form>
     <div class="btn-sort-container">
-      <div class="btn_sort" name="goodToBad" [className]="'goodToBad '+ ((sort | async) === 'goodToBad' ? 'active' : '')" #top (click)="sort.emit(top.getAttribute('name'))">Top <span>&#8594;</span></div>
-      <div class="btn_sort" name="badToGood" [className]="'badToGood '+ ((sort | async) === 'badToGood' ? 'active' : '')" #flop (click)="sort.emit(flop.getAttribute('name'))">Flop <span>&#8594;</span></div>
+      <div class="btn_sort" [className]="'goodToBad '+ ((sort | async) === SORT.GOOD_TO_BAD ? 'active' : '')" (click)="sort.emit(SORT.GOOD_TO_BAD)">Top <span>&#8594;</span></div>
+      <div class="btn_sort" [className]="'badToGood '+ ((sort | async) === SORT.BAD_TO_GOOD ? 'active' : '')" (click)="sort.emit(SORT.BAD_TO_GOOD)">Flop <span>&#8594;</span></div>
     </div>
   </div>
 </div>

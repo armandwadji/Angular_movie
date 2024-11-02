@@ -1,41 +1,29 @@
-import { Injectable, signal } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable, catchError, map, of } from "rxjs";
-import { Movie } from "./Movie";
-import { MovieApiSerializer } from "./movie-api.serializer";
-import { ApiResponseDto } from "../DTO/api-response.dto";
-import { MovieResponseApiSerializer } from "./movie-response-api.serializer";
-import { environment } from "src/environments/environment";
+import {inject, Injectable, signal, WritableSignal} from "@angular/core";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {catchError, map, Observable, of} from "rxjs";
+import {Movie} from "./Movie";
+import {ApiResponseDto} from "../DTO/api-response.dto";
+import {ResponseApiSerializer} from "./response-api.serializer";
+import {environment} from "src/environments/environment";
+import {StorageService} from "../services/storage-service";
 
 @Injectable({
   providedIn: "root",
 })
 export class MovieService {
+
   baseUrl = environment.base_url;
-  favoriesMovies = signal<Movie[]>(this.movieStorage)
+  http : HttpClient = inject(HttpClient);
+  responseApiSerializer: ResponseApiSerializer = inject(ResponseApiSerializer);
+  storageService = inject(StorageService);
+  favoritesMovies : WritableSignal<Movie[]> = signal(this.storageService.movies);
 
-  constructor(
-    private readonly http: HttpClient,
-    private readonly movieApiSerialiser: MovieApiSerializer,
-    private readonly movieResponseApiSerializer: MovieResponseApiSerializer,
-  ) {}
-
-  private convertMovieList(response: ApiResponseDto): Movie[] {
-    return response.results.map((movie: any) => this.movieApiSerialiser.fromJson(movie));
-  }
-
-  private convertMovieResponse(response: ApiResponseDto): ApiResponseDto {
-    return  this.movieResponseApiSerializer.fromJson(response);
-  }
-
-  public getMovies(): Observable<Movie[]> {
-    return this.http.get<object>(`${this.baseUrl}&query=marvel`).pipe(
-      map((data: any) => this.convertMovieList(data)),
-      catchError((error) => this.handleError(error, []))
-    );
-  }
-
-  public searchMovie(search: string, page: number): Observable<ApiResponseDto> {
+  /**
+   * Méthode permettant de récupérer les films par recherche et pagination
+   * @param search
+   * @param page
+   */
+  public getMoviesByPageAndSearch(search: string, page: number): Observable<ApiResponseDto> {
     const params = new HttpParams().append("query", search).append("page", page || 1);
 
     return this.http.get<Object>(`${this.baseUrl}`, { params }).pipe(
@@ -44,23 +32,13 @@ export class MovieService {
     );
   }
 
-  public updateFavoriesMovies() {
-    this.favoriesMovies.update( _ =>  this.movieStorage)
+  public updateFavoritesMovies(movie : Movie) {
+    this.storageService.movies = movie;
+    this.favoritesMovies.set(this.storageService.movies);
   }
 
-  public get movieStorage(): Movie[] {
-    const movies = localStorage.getItem("movies");
-    return movies ? JSON.parse(movies) : [];
-  }
-
-  public set movieStorage(movie: Movie) {
-    const moviesStorage: Movie[] = this.movieStorage;
-     
-    if (!moviesStorage.find((currentMovie: Movie) => currentMovie.id === movie.id)) {
-      localStorage.setItem("movies", JSON.stringify([...moviesStorage, movie]));
-    } else {
-      localStorage.setItem("movies", JSON.stringify(moviesStorage.filter(currentMovie => currentMovie.id !== movie.id)));
-    }
+  private convertMovieResponse(response: ApiResponseDto): ApiResponseDto {
+    return  this.responseApiSerializer.fromJson(response);
   }
 
   private handleError(error: Error, errorValue: any) {

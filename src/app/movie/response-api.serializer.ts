@@ -7,7 +7,7 @@ import { MovieApiSerializer } from "./movie-api.serializer";
     providedIn: "root",
 })
   
-export class MovieResponseApiSerializer extends BaseApiDtoSerializer<ApiResponseDto> { 
+export class ResponseApiSerializer extends BaseApiDtoSerializer<ApiResponseDto> {
 
     constructor(
         private readonly movieApiSerialiser: MovieApiSerializer

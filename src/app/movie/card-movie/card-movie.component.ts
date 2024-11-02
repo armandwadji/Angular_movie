@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { Movie } from '../Movie';
-import { MovieService } from '../movie.service';
+import {Component, inject, Input} from '@angular/core';
+import {Movie} from '../Movie';
+import {MovieService} from '../movie.service';
+import {StorageService} from "../../services/storage-service";
 
 @Component({
   selector: 'card-movie',
@@ -9,19 +10,28 @@ import { MovieService } from '../movie.service';
   ]
 })
 export class CardMovieComponent {
+    movieService: MovieService = inject(MovieService);
+    storageService: StorageService = inject(StorageService);
+
   @Input({required: true})
   movie: Movie
 
   @Input()
   removeList: boolean
-  
-  constructor(
-    private readonly movieService: MovieService
-  ){}
 
+
+    /**
+     * Méthode perméttent de stocker le film dans le localStorage
+     */
   getMovieStorage() {
-    this.movieService.movieStorage = this.movie;
-    this.movieService.updateFavoriesMovies();
- }
+        this.movieService.updateFavoritesMovies(this.movie);
+    };
+
+    /**
+     * Affichage plus foncé du button si le film fait partis des favoris
+     */
+  favoriteMovieSelected(): boolean {
+        return Boolean(this.storageService.movies.find((currentMovie: Movie) => currentMovie.id === this.movie.id));
+    };
 
 }

@@ -1,9 +1,10 @@
-import { Component, Signal } from "@angular/core";
-import { Movie } from "../Movie";
-import { BehaviorSubject, debounceTime, distinctUntilChanged, map, switchMap } from "rxjs";
-import { toSignal } from "@angular/core/rxjs-interop";
-import { MovieService } from "../movie.service";
-import { ApiResponseDto } from '../../DTO/api-response.dto';
+import {Component, computed, inject, signal, Signal, WritableSignal} from "@angular/core";
+import {Movie} from "../Movie";
+import {debounceTime, distinctUntilChanged, map, Observable, switchMap} from "rxjs";
+import {toObservable, toSignal} from "@angular/core/rxjs-interop";
+import {MovieService} from "../movie.service";
+import {ApiResponseDto} from '../../DTO/api-response.dto';
+import {SORT} from "../../enums/sort-enum";
 
 @Component({
   selector: "list-movie",
@@ -11,58 +12,74 @@ import { ApiResponseDto } from '../../DTO/api-response.dto';
   styles: [],
 })
 export class ListMovieComponent {
-  constructor(private readonly movieService: MovieService) {}
 
-  page: number = 1;
-  totalPage: number = 1;
-  search$$ = new BehaviorSubject<string>("marvel"); // BehaviorSubject permet de créer un observable auquel on peut souscrire tout en ayant une valeur initial
-  sort$$ = new BehaviorSubject<string | null>(null);
-  page$$ = new BehaviorSubject<number>(1);
+    movieService = inject(MovieService)
 
+    page: WritableSignal<number> = signal(1);
+    search: WritableSignal<string | null> = signal(null);
+    totalPage: WritableSignal<number> = signal(1);
+    sort: WritableSignal<SORT | null> = signal(null);
+    params: Signal<FilterParam> = computed(() => ({
+        page: this.page(),
+        sort: this.sort(),
+        search: this.search(),
+    }))
 
-  movieList: Signal<Movie[] | undefined> = toSignal(
-    
-    this.page$$.pipe(
-      distinctUntilChanged(),
-      switchMap((page) =>
-        this.sort$$.pipe(
-          distinctUntilChanged(), //Je prend en considération le trie que lorsque l'utilsateur clique sur des tris différents
-          switchMap((sort) =>
-            this.search$$.pipe(
-              debounceTime(300),
-              distinctUntilChanged((prev, next) => {
-                if (prev !== next) {
-                  this.page = 1;
-                  this.page$$.next(this.page)
-                }
-                return prev === next
-              }),
-              switchMap((search: string) => this.movieService.searchMovie(search || "marvel", page)),
-              map(({page, results: movieList, total_pages, total_results}: ApiResponseDto) => {
-                this.totalPage = total_pages;
-                return movieList.sort((a:any, b:any) => { if (sort === "goodToBad") return b.moyenne - a.moyenne; else return a.moyenne - b.moyenne; })
-              })
+    movies$: Observable<Movie[]> = toObservable(this.params).pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((param) => this.movieService.getMoviesByPageAndSearch(param.search || 'marvel', param.page)),
+        map((apiResponse: ApiResponseDto) => {
+            this.totalPage.set(apiResponse.total_pages)
+            return apiResponse.results.sort((a: Movie, b: Movie) => this.sort() === SORT.GOOD_TO_BAD ? b.moyenne - a.moyenne : a.moyenne - b.moyenne)
+        })
+    )
+
+    movieList: Signal<Movie[] | undefined> = toSignal(this.movies$);
+
+    /*    this.page$$.pipe(
+          distinctUntilChanged(),
+          switchMap((page) =>
+            this.sort$$.pipe(
+              distinctUntilChanged(), //Je prend en considération le trie que lorsque l'utilsateur clique sur des tris différents
+              switchMap((sort) =>
+                this.search$$.pipe(
+                  debounceTime(300),
+                  distinctUntilChanged((prev, next) => {
+                    if (prev !== next) {
+                        this.page.set(1);
+                        this.page$$.next(this.page())
+                    }
+                    return prev === next
+                  }),
+                  switchMap((search: string) => this.movieService.searchMovie(search || "marvel", page)),
+                  map(({page, results: movieList, total_pages, total_results}: ApiResponseDto) => {
+                      this.totalPage.set(total_pages);
+                    return movieList.sort((a:any, b:any) => { if (sort === "goodToBad") return b.moyenne - a.moyenne; else return a.moyenne - b.moyenne; })
+                  })
+                )
+              )
             )
           )
-        )
-      )
-    )
-  );
+        )*/
 
   onVisible() {
-    this.page++;
-    this.page$$.next(this.page);
+      this.page.update((page: number) => this.page() + 1);
   }
 
-  nextpage() {
-    this.page++;
-    this.page$$.next(this.page);
+  nextPage() {
+      this.page.update((page: number) => this.page() + 1);
   }
 
   previousPage() {
-    if (this.page > 1) {
-      this.page--;
-    }
-    this.page$$.next(this.page);
+      this.page.update((page: number) => page > 1 ? page - 1 : page);
   }
 }
+
+interface FilterParam {
+    page: number,
+    sort: SORT | null,
+    search: string | null,
+}
+
+

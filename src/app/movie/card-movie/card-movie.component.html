@@ -1,20 +1,21 @@
+<div class="card">
+  <img [src]="movie.image" [alt]="'affiche de ' + movie.title" />
+  <h2>{{ movie.title }}</h2>
+  <h5>Sortie le : {{ movie.date | date : "dd/MM/YYYY" }}</h5>
+  <h4>{{ movie.moyenne | number : "1.1-1" }}/10 <span>⭐️</span></h4>
+  <ul>
+    <li *ngFor="let genre of movie.genres">
+      {{ genre | movieGenre }}
+    </li>
+  </ul>
+  <h3>Synopsis</h3>
+  <p>{{ movie.description }}</p>
 
-<img [src]="movie.image" [alt]="'affiche de ' + movie.title" />
-<h2>{{ movie.title }}</h2>
-<h5>Sortie le : {{ movie.date | date : "dd/MM/YYYY" }}</h5>
-<h4>{{ movie.moyenne | number : "1.1-1" }}/10 <span>⭐️</span></h4>
-<ul>
-  <li *ngFor="let genre of movie.genres">
-    {{ genre | movieGenre }}
-  </li>
-</ul>
-<h3>Synopsis</h3>
-<p>{{ movie.description }}</p>
-
-<div class="btn" *ngIf="!removeList; then thenBlock; else elseBlock"></div>
-<ng-template #thenBlock>
-  <div class="btn" (click)="getMovieStorage()">Ajouter le coups de coeur</div>
-</ng-template>
-<ng-template #elseBlock>
-  <div class="btn" (click)="getMovieStorage()">Retirer le coups de coeur</div>
-</ng-template>
+  <ng-container *ngIf="!removeList; then thenBlock; else elseBlock"></ng-container>
+  <ng-template #thenBlock>
+    <div class="btn {{favoriteMovieSelected() && 'favorite'}}" (click)="getMovieStorage()">Ajouter le coups de coeur</div>
+  </ng-template>
+  <ng-template #elseBlock>
+    <div class="btn" (click)="getMovieStorage()">Retirer le coups de coeur</div>
+  </ng-template>
+</div>

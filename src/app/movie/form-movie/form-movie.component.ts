@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import {SORT} from "../../enums/sort-enum";
+
 
 @Component({
   selector: "form-movie",
@@ -6,11 +8,13 @@ import { Component, EventEmitter, Output } from "@angular/core";
   styles: [],
 })
 export class FormMovieComponent {
-  
-  @Output()
-  searchvalue = new EventEmitter<string>()
+
+  protected readonly SORT = SORT;
 
   @Output()
-  sort = new EventEmitter<string | null>()
+  searchValue = new EventEmitter<string>()
+
+  @Output()
+  sort = new EventEmitter<SORT | null>()
 
 }
