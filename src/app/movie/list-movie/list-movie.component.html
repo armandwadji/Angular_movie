@@ -1,14 +1,14 @@
 <form-movie [(search)]="search" [(sort)]="sort"></form-movie>
 
-@if (movieList()){
+@if (movies()){
     <section class="card-list">
-        @for (movie of movieList(); track movie.id; let idx = $index) {
+        @for (movie of movies(); track movie.id; let idx = $index) {
             <card-movie [movie]="movie"></card-movie>
         } @empty {
             <p class="card-empty">Aucun éléments ne correspond à votre recherche</p>
         }
     </section>
-    @if (movieList().length > 0){
+    @if (movies().length > 0){
         <div class="pagination-container">
             <button [class]="'pagination-change pagination-decrease ' + (page() === 1 ? 'disabled' : '')"
                     [disabled]="page() === 1" (click)="previousPage()">&lt;

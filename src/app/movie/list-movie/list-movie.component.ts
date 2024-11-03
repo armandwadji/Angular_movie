@@ -42,7 +42,7 @@ export class ListMovieComponent {
     )
 
     // @ts-ignore
-    movieList: Signal<Movie[] > = toSignal(this.movies$);
+    movies: Signal<Movie[] > = toSignal(this.movies$);
 
     /*    this.page$$.pipe(
           distinctUntilChanged(),
@@ -71,7 +71,7 @@ export class ListMovieComponent {
         )*/
 
   nextPage() {
-      this.page.update((page: number) => this.page() + 1);
+      this.page.update((page: number) => page + 1);
   }
 
   previousPage() {
