@@ -1,12 +1,10 @@
-<div class="card-list">
-    <section class="card-list">
-        @for (movie of favoritesMovies; track movie.id; let idx = $index) {
-            <card-movie [movie]="movie" [removeList]="true"></card-movie>
-        } @empty {
-            <p>Vous n'avez pas encore de favoris</p>
-        }
-    </section>
-</div>
+<section class="card-list">
+    @for (movie of favoritesMovies; track movie.id; let idx = $index) {
+        <card-movie [movie]="movie" [removeList]="true"></card-movie>
+    } @empty {
+        <p class="card-empty">Vous n'avez pas encore de favoris</p>
+    }
+</section>
 
 
 

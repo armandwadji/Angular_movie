@@ -41,7 +41,8 @@ export class ListMovieComponent {
         })
     )
 
-    movieList: Signal<Movie[] | undefined> = toSignal(this.movies$);
+    // @ts-ignore
+    movieList: Signal<Movie[] > = toSignal(this.movies$);
 
     /*    this.page$$.pipe(
           distinctUntilChanged(),
