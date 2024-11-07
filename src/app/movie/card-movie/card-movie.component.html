@@ -10,12 +10,9 @@
   </ul>
   <h3>Synopsis</h3>
   <p>{{ movie.description }}</p>
-
-  <ng-container *ngIf="!removeList; then thenBlock; else elseBlock"></ng-container>
-  <ng-template #thenBlock>
-    <div class="btn {{favoriteMovieSelected() && 'favorite'}}" (click)="getMovieStorage()">Ajouter le coups de coeur</div>
-  </ng-template>
-  <ng-template #elseBlock>
-    <div class="btn" (click)="getMovieStorage()">Retirer le coups de coeur</div>
-  </ng-template>
+    @if (!removeList){
+        <div class="btn {{favoriteMovieSelected() && 'favorite'}}" (click)="getMovieStorage()">Ajouter le coups de coeur</div>
+    } @else {
+        <div class="btn" (click)="getMovieStorage()">Retirer le coups de coeur</div>
+    }
 </div>

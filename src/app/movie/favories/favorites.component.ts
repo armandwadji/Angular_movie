@@ -1,4 +1,4 @@
-import {Component, effect} from "@angular/core";
+import {Component, effect, inject} from "@angular/core";
 import {Movie} from "../Movie";
 import {MovieService} from "../movie.service";
 
@@ -9,8 +9,9 @@ import {MovieService} from "../movie.service";
 })
 export class FavoritesComponent {
   favoritesMovies: Movie[] = [];
+  movieService: MovieService = inject(MovieService);
 
-  constructor(private readonly movieService: MovieService) {
+  constructor() {
     effect( _ =>  this.favoritesMovies = this.movieService.favoritesMovies() );
   }
 }
